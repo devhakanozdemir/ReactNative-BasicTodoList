@@ -2,10 +2,10 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
-  Pressable,
+  FlatList,
 } from 'react-native';
 import { useState } from 'react';
+import TodoTextInput from './components/TodoTextInput';
 
 
 export default function App() {
@@ -14,39 +14,30 @@ export default function App() {
   const [value2, setValue2] = useState([])
 
   const handleButton = () => {
-    setValue2([...value2, value])
+    setValue2([...value2, { text: value, id: Math.random().toString() }])
     setValue("")
   }
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.inputStyle}
-        placeholder='You can add todos here'
-        onChangeText={setValue}
-        value={value}
-      />
 
       <View style={styles.container2}>
-
-        {
-          value2.map((item, index) => {
+        <FlatList showsVerticalScrollIndicator={false}
+          alwaysBounceVertical={false}
+          data={value2}
+          keyExtractor={(item, index) => item.id}
+          renderItem={(itemText) => {
             return (
-              <View key={index} style={styles.listStyle}>
-                <Text>{item}</Text>
+              <View style={styles.listStyle}>
+                <Text style={{ color: "white" }}>{itemText.item.text}</Text>
               </View>
             )
-          })
-        }
+          }}
+
+        />
 
       </View>
 
-      <Pressable
-        style={styles.buttonStyle}
-        onPress={() => handleButton()}
-      >
-        <Text>Kaydet</Text>
-      </Pressable>
     </View>
   );
 }
@@ -54,13 +45,13 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'orange',
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   inputStyle: {
-    backgroundColor: "tomato",
+    backgroundColor: "white",
     width: "80%",
     height: 50,
     borderRadius: 15,
@@ -70,7 +61,7 @@ const styles = StyleSheet.create({
   buttonStyle: {
     width: "80%",
     height: 50,
-    backgroundColor: "green",
+    backgroundColor: "gray",
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
@@ -94,5 +85,10 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  inputContainer: {
+    width: "100%",
+    alignItems: "center"
   }
 });
