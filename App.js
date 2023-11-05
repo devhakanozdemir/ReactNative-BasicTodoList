@@ -6,20 +6,22 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import TodoTextInput from './components/TodoTextInput';
+import TodoTask from './components/TodoTask';
 
 
 export default function App() {
 
-  const [value, setValue] = useState("")
   const [value2, setValue2] = useState([])
 
-  const handleButton = () => {
-    setValue2([...value2, { text: value, id: Math.random().toString() }])
-    setValue("")
+
+  const handleButton = (inputTextData) => {
+    setValue2([...value2, { text: inputTextData, id: Math.random().toString() }])
   }
 
   return (
     <View style={styles.container}>
+
+      <TodoTextInput onTaskHandler={handleButton} />
 
       <View style={styles.container2}>
         <FlatList showsVerticalScrollIndicator={false}
@@ -28,9 +30,7 @@ export default function App() {
           keyExtractor={(item, index) => item.id}
           renderItem={(itemText) => {
             return (
-              <View style={styles.listStyle}>
-                <Text style={{ color: "white" }}>{itemText.item.text}</Text>
-              </View>
+              <TodoTask onAddTask={itemText.item.text} />
             )
           }}
 
@@ -50,24 +50,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  inputStyle: {
-    backgroundColor: "white",
-    width: "80%",
-    height: 50,
-    borderRadius: 15,
-    textAlign: "center",
-  },
-
-  buttonStyle: {
-    width: "80%",
-    height: 50,
-    backgroundColor: "gray",
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-
   container2: {
     width: "80%",
     height: 400,
@@ -76,19 +58,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-
-  listStyle: {
-    width: 200,
-    height: 30,
-    backgroundColor: "green",
-    marginBottom: 5,
-    borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  inputContainer: {
-    width: "100%",
-    alignItems: "center"
-  }
 });
